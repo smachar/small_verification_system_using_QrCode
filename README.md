@@ -1,0 +1,1 @@
+# small_verification_system_using_QrCode
