@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Entry Verification</title>
+    <script type="text/javascript" src="instascan.min.js"></script>
+  </head>
+  <body>
+    <video id="preview"></video>
+    <script type="text/javascript">
+      //function scanit(){
+        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+        scanner.addListener('scan', function (qrcode) {
+          console.log("making the req", qrcode);
+          //return qrcode;
+          var xmlhttp = new XMLHttpRequest();
+          xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200){
+              document.getElementById("appr").innerHTML = this.responseText;
+              //console.log("this the response: ", this.responseText);
+              }
+            };
+          xmlhttp.open("GET", "verifycode.php?qr=" + qrcode, true);
+          xmlhttp.send();
+        });
+
+        
+        Instascan.Camera.getCameras().then(function (cameras) {
+          if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+          } else {
+            console.error('No cameras found.');
+          }
+        }).catch(function (e) {
+          console.error(e);
+          return 0;
+        });
+      //}
+    </script>
+    <div align="center">
+      <h1 id="appr">Welcome</h1>
+    </div>
+  </body>
+</html>
